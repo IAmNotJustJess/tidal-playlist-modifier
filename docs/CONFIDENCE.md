@@ -1,0 +1,1 @@
+Todo: Explain how the confidence system works :P

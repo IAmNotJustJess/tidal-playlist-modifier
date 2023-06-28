@@ -82,7 +82,13 @@ user = tidalapi.user.LoggedInUser(session, session.user.id)
 print("")
 print("Fetching playlists...")
 playlists = tidalapi.user.LoggedInUser.playlists(session.user)
-print("-+-====================-+-")
+if len(playlists) == 0:
+    input("You don't have any playlists! Create one before using the script!")
+    exit()
+elif len(playlists) == 50:
+    input("You do not have any free playlist slots! Please delete one to allow the script to work properly!")
+    exit()
+print("\n-+-====================-+-")
 playlistCount = 1
 for playlist in playlists:
     print(playlistCount, ": ", playlist.name, " - ", playlist.description, " (", playlist.num_tracks, " tracks)",
@@ -90,9 +96,6 @@ for playlist in playlists:
     playlistCount += 1
 print("-+-====================-+-\n")
 
-if playlistCount == 1:
-    print("You don't have any playlists! Tool closing...")
-    exit()
 
 confirmed = 0
 selectedPlaylistID = 0
@@ -121,7 +124,7 @@ selectedPlaylist = playlists[selectedPlaylistID - 1]
 
 selectedOption = 0
 while selectedOption == 0:
-    print("\nWhat do you want to do with it?\n")
+    print("\nPlease make a selection out of the available options:\n")
     print("-+-====================-+-")
     print(
         "1: Find best possible audio quality for the tracks in it, create a copy and manually select tracks if found. [A LOT SLOWER BUT IS MORE ACCURATE]")
@@ -135,11 +138,11 @@ while selectedOption == 0:
 
 if selectedOption == 1 or selectedOption == 2:
     print("Creating a copy of the playlist!")
-    user.create_playlist((selectedPlaylist.name + " (BPA)"), selectedPlaylist.description)
+    user.create_playlist((selectedPlaylist.name + " (BAP)"), selectedPlaylist.description)
     playlists = user.playlists()
     createdPlaylist = None
     for playlist in playlists:
-        if playlist.name == selectedPlaylist.name + " (BPA)":
+        if playlist.name == selectedPlaylist.name + " (BAP)":
             createdPlaylist = tidalapi.playlist.UserPlaylist(session=session, playlist_id=playlist.id)
             break
 
@@ -197,7 +200,7 @@ if selectedOption == 1 or selectedOption == 2:
                           sep="")
                     print("-+-====================-+-")
                     print("Original track: ", display_track_info(track), sep="")
-                    print("Inserting 0 will select it instead of the found ones!")
+                    print("Selecting 0 will insert the original instead of the found ones!")
                     print("-+-====================-+-")
 
                     i = 1
@@ -208,7 +211,7 @@ if selectedOption == 1 or selectedOption == 2:
                     print("-+-====================-+-\n")
 
                     selectedTrackID = int(
-                        input("Insert the ID (number next to the track name) of the track you wish to insert: "))
+                        input("Select the ID (number next to the track name) of the track you wish to insert to the playlist: "))
                     if 1 <= selectedTrackID <= len(listToChooseFrom):
                         added = 1
                         addSongs = add_songs_to_playlist(createdPlaylist, addSongs,
@@ -247,4 +250,4 @@ if selectedOption == 1 or selectedOption == 2:
         print(
             "\nPlease make sure to check if every found track is the correct one.\nDo not delete the old playlist until you confirm everything yourself!")
 
-    print("\nThanks for using the script!\nIt's now safe to close the window!")
+input("\nThanks for using the script!\nIt's now safe to close the window!")
