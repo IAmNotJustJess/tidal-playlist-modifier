@@ -3,7 +3,7 @@
 
 ## Requirements:
 - A [TIDAL](https://tidal.com) account, with an active *HiFi* or *HiFi Plus* subscription. (Although as of now HiFi Plus is recommended as the script searches for Master quality first!)
-- [Python 3.10](https://www.python.org/downloads/) (Other versions were untested)
+- [Python 3.10 or newer](https://www.python.org/downloads/) (Older versions were untested)
 - [python-tidal](https://github.com/tamland/python-tidal)
 
 ## Installation guide:
