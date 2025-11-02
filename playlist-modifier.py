@@ -1,5 +1,6 @@
 import tidalapi
 import math
+from tidalapi import Quality
 from operator import itemgetter
 from difflib import SequenceMatcher
 
@@ -69,7 +70,7 @@ def display_track_info(fn_track):
     dur_minutes = str(dur_minutes)
     return fn_track.name + " by " + artists_as_string(
         fn_track) + " (Album: " + fn_track.album.name + ") [" + dur_minutes + ":" + dur_secs + "], quality: " + str(
-        fn_track.audio_quality)[8:]
+        fn_track.audio_quality)
 
 
 print(
@@ -155,7 +156,7 @@ if selectedOption == 1 or selectedOption == 2:
         trackNo += 1
         print("Progress: ", trackNo, "/", selectedPlaylist.num_tracks, " ",
               round(trackNo / selectedPlaylist.num_tracks * 100, 2), "%", sep="")
-        if track.audio_quality == tidalapi.session.Quality.master:
+        if track.audio_quality == Quality.hi_res_lossless:
             addSongs = add_songs_to_playlist(createdPlaylist, addSongs, str(track.id))
         else:
             query = track.name
@@ -164,23 +165,23 @@ if selectedOption == 1 or selectedOption == 2:
 
             listToChooseFrom = []
 
-            searchingForQuality = tidalapi.session.Quality.master
+            searchingForQuality = Quality.hi_res_lossless
             while True:
                 if track.audio_quality == searchingForQuality:
                     break
 
                 for searchedTrack in search["tracks"]:
-                    if searchedTrack.audio_quality.value == searchingForQuality.value:
+                    if searchedTrack.audio_quality == searchingForQuality:
                         listToChooseFrom.append(searchedTrack)
                 if len(listToChooseFrom) > 0:
                     break
 
-                if searchingForQuality == tidalapi.session.Quality.master:
-                    searchingForQuality = tidalapi.session.Quality.lossless
-                elif searchingForQuality == tidalapi.session.Quality.lossless:
-                    searchingForQuality = tidalapi.session.Quality.high
-                elif searchingForQuality == tidalapi.session.Quality.high:
-                    searchingForQuality = tidalapi.session.Quality.low
+                if searchingForQuality == Quality.hi_res_lossless:
+                    searchingForQuality = Quality.high_lossless
+                elif searchingForQuality == Quality.high_lossless:
+                    searchingForQuality = Quality.low_320k
+                elif searchingForQuality == Quality.low_320k:
+                    searchingForQuality = Quality.low_96k
                 else:
                     break
 
@@ -196,7 +197,7 @@ if selectedOption == 1 or selectedOption == 2:
                 while added == 0:
                     print("\n-+-====================-+-")
                     print("Multiple tracks were found! Please select the one you deem fitting!")
-                    print("Best possible quality found for this track: ", str(listToChooseFrom[0][0].audio_quality)[8:],
+                    print("Best possible quality found for this track: ", str(listToChooseFrom[0][0].audio_quality),
                           sep="")
                     print("-+-====================-+-")
                     print("Original track: ", display_track_info(track), sep="")
