@@ -2,7 +2,7 @@
  A somewhat simple Python script that finds you best possible audio quality for your TIDAL playlists.
 
 ## Requirements:
-- A [TIDAL](https://tidal.com) account, with an active *HiFi* or *HiFi Plus* subscription. (Although as of now HiFi Plus is recommended as the script searches for Master quality first!)
+- A [TIDAL](https://tidal.com) account, with an active subscription
 - [Python 3.10 or newer](https://www.python.org/downloads/) (Older versions were untested)
 - [python-tidal](https://github.com/tamland/python-tidal)
 
